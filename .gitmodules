@@ -1,0 +1,3 @@
+[submodule "external/hungarian_assignment"]
+	path = external/hungarian_assignment
+	url = https://github.com/maksay/hungarian_assignment.git
