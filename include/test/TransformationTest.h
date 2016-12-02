@@ -284,14 +284,17 @@ class TransformationTest {
     d1 = new Detection(Detection::NormalNode);
     d1->x = 0;
     d1->y = 0;
+    d1->frame_num = 0;
 
     d2 = new Detection(Detection::NormalNode);
     d2->x = 2;
     d2->y = 4;
+    d2->frame_num = 1;
 
     d3 = new Detection(Detection::NormalNode);
     d3->x = 3;
     d3->y = 6;
+    d3->frame_num = 4;
 
     std::vector<std::pair<float, float> > points;
     points.push_back(std::make_pair(0., 0.));
@@ -328,12 +331,12 @@ class TransformationTest {
            buffs.substr(0, expected.size()) == expected);
     fgets(buff, 1111, fp);
     buffs = std::string(buff);
-    expected = "2 0 0.000000 0.000000 2.000000 4.000000";
+    expected = "2 0 0 0.000000 0.000000 1 2.000000 4.000000";
     assert(buffs.size() >= expected.size() &&
            buffs.substr(0, expected.size()) == expected);
     fgets(buff, 1111, fp);
     buffs = std::string(buff);
-    expected = "1 1 3.000000 6.000000";
+    expected = "1 1 4 3.000000 6.000000";
     assert(buffs.size() >= expected.size() &&
            buffs.substr(0, expected.size()) == expected);
     assert(!fgets(buff, 1111, fp));

@@ -2,9 +2,9 @@
  * Copyright 2016 Andrii Maksai
  */
 #include "Transformation.h"
+#include <algorithm>
 #include <cassert>
 #include <climits>
-#include <algorithm>
 #include <cstdio>
 #include <iostream>
 #include "CenterlineWithWidthPattern.h"
@@ -34,7 +34,7 @@ void Transformation::patternsToFile(std::vector<Pattern *> patterns,
   if (Parameters::get_int("IO.Stderr")) {
     std::cerr << "Writing patterns to " << fpath << std::endl;
   }
- FILE *fp = fopen(fpath.c_str(), "w");
+  FILE *fp = fopen(fpath.c_str(), "w");
   for (size_t idx = 0; idx < patterns.size(); ++idx) {
     fprintf(fp, "%s\n", patterns[idx]->to_string().c_str());
   }
@@ -59,8 +59,8 @@ void Transformation::assignmentToFile(
     while (patterns[pattern_pos] != assignment[idx].second) ++pattern_pos;
     fprintf(fp, "%d %d", (int)assignment[idx].first.size(), (int)pattern_pos);
     for (size_t jdx = 0; jdx < assignment[idx].first.size(); ++jdx) {
-      fprintf(fp, " %f %f", assignment[idx].first[jdx]->x,
-              assignment[idx].first[jdx]->y);
+      fprintf(fp, " %d %f %f", assignment[idx].first[jdx]->frame_num,
+              assignment[idx].first[jdx]->x, assignment[idx].first[jdx]->y);
     }
     fprintf(fp, "\n");
   }
@@ -292,14 +292,14 @@ void Transformation::splitTrajectoriesInTwo(
   right->clear();
   int time_min = INT_MAX;
   int time_max = INT_MIN;
-  for(size_t idx = 0; idx < trajectories.size(); ++idx) {
+  for (size_t idx = 0; idx < trajectories.size(); ++idx) {
     time_min = std::min(time_min, trajectories[idx][0]->frame_num);
     time_max = std::max(time_max, trajectories[idx].back()->frame_num);
   }
   int time_mid = (time_min + time_max) / 2;
-  for(size_t idx = 0; idx < trajectories.size(); ++idx) {
+  for (size_t idx = 0; idx < trajectories.size(); ++idx) {
     std::vector<Detection *> cur_left(0), cur_right(0);
-    for(size_t jdx = 0; jdx < trajectories[idx].size(); ++jdx) {
+    for (size_t jdx = 0; jdx < trajectories[idx].size(); ++jdx) {
       if (trajectories[idx][jdx]->frame_num < time_mid) {
         cur_left.push_back(trajectories[idx][jdx]);
       } else {

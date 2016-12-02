@@ -111,7 +111,7 @@ class SolverTest {
         Metric::IDF13D(expected_trajectories, gt_trajectories,
                        Parameters::get_float("Parameters.D_match"), NULL);
 
-    assert(fabs(expected_metric_val - metric_val) < 0.03);
+    assert(fabs(expected_metric_val - metric_val) < 0.1);
   }
 };
 #endif  // CODE_INCLUDE_TEST_SOLVERTEST_H

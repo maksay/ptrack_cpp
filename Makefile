@@ -67,32 +67,15 @@ ifeq ($(UNAME_S),Darwin)
   endif
 endif
 
-# Code coverage
-ifeq ($(MAKECMDGOALS),test)
-	CFLAGS += -fprofile-arcs -ftest-coverage -fPIC -O0
-else
-	CFLAGS += -O2
-endif
+CFLAGS += -O2
 
-all: $(TARGETFILES) tags external
+all: $(TARGETFILES) external
 
 external: external/hungarian_assignment/bin/hungarian_solver
 
 external/hungarian_assignment/bin/hungarian_solver: external/hungarian_assignment/src/*
 	@if [ $(VERBOSE) = 1 ]; then echo "Making external tools"; fi
 	@$(MAKE) -C external/hungarian_assignment/
-
-test: clean $(TARGETDIR)/test resources/coverage_report.html
-
-resources/coverage_report.html: $(TARGETDIR)/test external
-	@./$(TARGETDIR)/test
-	@if [ $(VERBOSE) = 1 ]; then echo "Generating code coverage"; fi
-	@gcovr -r . --html --html-details -o resources/coverage_report.html -s -p
-	@$(MAKE) clean
-
-tags: $(RUNSOURCES) $(LIBSOURCES) $(INCSOURCES)
-	@if [ $(VERBOSE) = 1 ]; then echo "Running tags..."; fi
-	@ctags $(TAGFLAGS) $(RUNSOURCES) $(LIBSOURCES) $(INCSOURCES)
 
 $(TARGETDIR)/%: $(RUNBUILDDIR)/%.o $(LIBOBJECTS)
 	@mkdir -p $(TARGETLIST)
@@ -117,6 +100,6 @@ $(LIBBUILDDIR)/%.o: $(LIBSRCDIR)/%.$(SRCEXT)
 
 clean:
 	@if [ $(VERBOSE) = 1 ]; then echo "Cleaning..."; fi
-	@$(RM) -r $(LIBBUILDDIR) $(RUNBUILDDIR) $(TARGETDIR) tags
+	@$(RM) -r $(LIBBUILDDIR) $(RUNBUILDDIR) $(TARGETDIR)
 
 .PHONY: all clean
